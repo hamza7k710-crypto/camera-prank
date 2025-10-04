@@ -1,0 +1,103 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📸 موقع هزار الكاميرا</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+        #video {
+            width: 300px;
+            height: 200px;
+            border: 5px solid white;
+            border-radius: 15px;
+            margin: 20px;
+        }
+        #canvas {
+            display: none;
+        }
+        button {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>📸 موقع هزار الكاميرا</h1>
+    <p>هصورك صورة مضحكة علشان نضحك مع بعض! 😄</p>
+    
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+    
+    <br>
+    <button onclick="startCamera()">✅ سماح للكاميرا</button>
+    <button onclick="capturePhoto()">📸 صورني!</button>
+    <button onclick="showPrank()">😂 كشف المقلب</button>
+    
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        
+        // طلب الإذن وتشغيل الكاميرا
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                alert('✅ يا باشا! الإذن اتبعت! الكاميرا شغالة!');
+            } catch (err) {
+                alert('❌ يا عم، الإذن مكنش! عادي، المقلب فشل! 😂');
+                console.error('Error accessing camera:', err);
+            }
+        }
+        
+        // التقاط صورة
+        function capturePhoto() {
+            if (!video.srcObject) {
+                alert('🚫 اضغط على "سماح للكاميرا" الأول!');
+                return;
+            }
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            // تحويل الصورة لـ URL
+            const photoUrl = canvas.toDataURL('image/png');
+            
+            // عرض الصورة الملتقطة
+            const img = new Image();
+            img.src = photoUrl;
+            img.width = 300;
+            document.body.appendChild(img);
+            
+            alert('📸 اتصورت! شوف صورتك تحت! 😂');
+        }
+        
+        // كشف المقلب
+        function showPrank() {
+            alert(`😂😂😂 هزار بس يا معلم!
+            
+الموقع ده هزار وعملي صورتك علشان نضحك!
+مفيش أي حاجة تانية... روح اعمل كده مع أصحابك!`);
+            
+            // إيقاف الكاميرا
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+        }
+    </script>
+</body>
+</html>
+```
